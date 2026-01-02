@@ -1,0 +1,44 @@
+:root {
+  /* Palette - Monochrome & Woodcut */
+  --color-bg: #fcfbf9;     /* Off-white paper */
+  --color-ink: #1a1a1a;    /* Deep black ink */
+  --color-accent: #f5bd02; /* Mongol Pencil Yellow */
+  --color-wood: #a67c52;   /* Cedar accent (optional) */
+  --color-faint: #e5e5e5;  /* Subtle lines */
+
+  /* Typography */
+  --font-serif: "Times New Roman", Times, serif; /* System serif for engraving feel */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-sm: calc(var(--spacing-unit) * 1);
+  --spacing-md: calc(var(--spacing-unit) * 2);
+  --spacing-lg: calc(var(--spacing-unit) * 4);
+  --spacing-xl: calc(var(--spacing-unit) * 8);
+
+  /* Layout */
+  --container-max-width: 980px;
+  --header-height: 80px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-serif);
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}

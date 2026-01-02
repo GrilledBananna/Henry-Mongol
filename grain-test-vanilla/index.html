@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mongol Pencils - History & Grain Test</title>
+    <style>
+        :root {
+            /* Mongol Brand Colors */
+            --color-mongol-yellow: #ffc72c;
+            /* Brighter, classic pencil yellow */
+            --color-mongol-black: #111111;
+            --color-paper: #fcfbf9;
+
+            --color-bg: var(--color-mongol-yellow);
+            --color-ink: var(--color-mongol-black);
+            --color-faint: #e5e5e5;
+
+            --font-serif: "Times New Roman", Times, serif;
+            --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            background-color: var(--color-bg);
+            color: var(--color-ink);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            /* Wider to accommodate yellow gutters */
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* Sidebar TOC */
+        .sidebar {
+            width: var(--sidebar-width);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 4rem 2rem;
+            display: none;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.02), transparent);
+        }
+
+        .sidebar-title {
+            font-family: var(--font-sans);
+            font-weight: bold;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            border-bottom: 2px solid var(--color-ink);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.8rem;
+        }
+
+        .morse-bio {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-ink);
+            font-size: 0.85rem;
+            font-family: var(--font-sans);
+        }
+
+        .morse-bio strong {
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: var(--color-ink);
+            font-family: var(--font-sans);
+            font-weight: 500;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            transition: all 0.2s;
+            display: block;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            opacity: 1;
+            transform: translateX(4px);
+        }
+
+        /* Main Content - The "Paper" */
+        .content-wrapper {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .content {
+            background: var(--color-paper);
+            padding: 3rem 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            min-height: 90vh;
+        }
+
+        @media (min-width: 768px) {
+            .sidebar {
+                display: block;
+            }
+
+            .content-wrapper {
+                padding: 4rem;
+            }
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 4.5rem;
+            /* Bigger, but not too big */
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .subhead {
+            font-family: var(--font-sans);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0.5;
+            margin-bottom: 4rem;
+            border-bottom: 4px solid var(--color-mongol-yellow);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-top: 2.5rem;
+            margin-bottom: 0.75rem;
+            font-family: var(--font-sans);
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.15rem;
+            color: #333;
+            max-width: 65ch;
+        }
+
+        strong {
+            color: #000;
+        }
+
+        /* Episode Player Styling */
+        #episode-container {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 4px solid var(--color-ink);
+            /* Thicker border */
+            position: relative;
+            background: #fff;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1);
+            /* Hard shadow */
+        }
+
+        #overlay-text {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            font-family: var(--font-sans);
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: #fff;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--color-ink);
+            opacity: 0;
+            transition: opacity 0.2s;
+            box-shadow: 4px 4px 0 var(--color-mongol-yellow);
+        }
+
+        #overlay-text.visible {
+            opacity: 1;
+        }
+
+        #paused-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-mongol-yellow);
+            color: var(--color-ink);
+            padding: 0.75rem 2rem;
+            border: 2px solid black;
+            font-family: var(--font-sans);
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            display: none;
+            box-shadow: 4px 4px 0 black;
+        }
+
+        .caption {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Decorative Images */
+        .decorative-pencil {
+            width: 100%;
+            height: auto;
+            margin: 2rem 0;
+            border-bottom: 2px solid var(--color-mongol-yellow);
+            padding-bottom: 1rem;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1rem;
+            border: 2px solid var(--color-ink);
+        }
+
+        .yellow-box {
+            background-color: #fff9db;
+            /* Lighter yellow for readability inside white paper */
+            border: 2px solid var(--color-mongol-yellow);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border-radius: 4px;
+            box-shadow: 4px 4px 0 rgba(255, 199, 44, 0.3);
+        }
+
+        .yellow-box h2 {
+            margin-top: 0;
+            border-bottom: none;
+            color: #000;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .yellow-box p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .yellow-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-family: var(--font-sans);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-right: none;
+        }
+
+        footer {
+            margin-top: 6rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #999;
+            font-family: var(--font-sans);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#hero">Grain Test</a></li>
+                    <li><a href="#mongol">The Mongol Pencil</a></li>
+                    <li><a href="#berolzheimer">The Berolzheimer Family</a></li>
+                </ul>
+
+                <div class="morse-bio">
+                    <strong>Who is Morse?</strong>
+                    <span
+                        style="display:block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; color: #444;">Chief
+                        Grading Officer</span>
+                    <p style="font-size: 0.8rem; margin-bottom: 0.5rem;">Discovered in 1888 by timber scouts in the High
+                        Sierras, Morse was observed rejecting common driftwoods and selectively felling only the
+                        straightest, finest-grained Incense-cedars.</p>
+                    <p style="font-size: 0.8rem;">Recognizing a kindred spirit, the family adopted him. If the grain
+                        isn't straight enough for Morse to chew clean, it's not good enough for a Mongol.</p>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header>
+                <h1>Mongol Pencils</h1>
+                <p class="subhead">Materials. Graphite. Time.</p>
+            </header>
+
+            <section id="hero">
+                <div id="episode-container" role="button" aria-label="Play/Pause Animation">
+                    <!-- Images will be injected by JS -->
+                    <img src="morse_frame_1_cedar.png" alt="Morse testing Incense Cedar"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                    <div id="overlay-text">California Incense-cedar.</div>
+                    <div id="paused-indicator">PAUSED</div>
+                </div>
+                <p class="caption">Micro-Episode 01: The "Grain Test" — demonstrating the resilience of premium
+                    Incense-cedar.</p>
+            </section>
+
+            <section id="mongol">
+                <div class="yellow-box">
+                    <h2>What is Mongol?</h2>
+                    <p><strong>The Mongol is back.</strong> Revived by the Berolzheimer family—whose pencil-making
+                        legacy spans over 150 years—this icon returns with a renewed commitment to excellence.</p>
+                    <p>Crafted from premium USA-grown Incense-cedar for smooth, reliable sharpening and featuring a
+                        strong yet silky European graphite core, the Mongol delivers a writing experience unlike any
+                        other.</p>
+                    <p>Its classic rounded profile rests comfortably in the hand, reducing fatigue, while the
+                        high-quality eraser removes marks cleanly and easily. Every component is thoughtfully sourced
+                        from around the world—not for the lowest cost, but to meet the highest standards of performance
+                        and quality.</p>
+                </div>
+
+                <h3>A Universal Standard</h3>
+                <p>The Mongol 482 originally established the benchmark for general-purpose writing. It was not a luxury
+                    item, nor was it disposable. It represented <strong>quiet everyday excellence</strong>.</p>
+
+                <h3>The Legacy</h3>
+                <p>Despite later myths, the name "Mongol" did not originate from exotic graphite sources. It is commonly
+                    attributed to "Purée Mongole," a soup favored by a member of the Faber family. Today, that name
+                    again stands for strength, endurance, and reliability.</p>
+            </section>
+
+            <section id="berolzheimer">
+                <h2>The Berolzheimer Family</h2>
+                <p>While the Mongol represents the product we remember, the Berolzheimer family represents the
+                    infrastructure that makes quality pencils possible.</p>
+
+                <h3>From Fürth to New York</h3>
+                <p>Originating from Fürth, Germany—the heart of the European pencil industry—Daniel Berolzheimer
+                    emigrated to the United States in the mid-19th century. He founded what became the <strong>Eagle
+                        Pencil Company</strong>, a massive manufacturer that industrialized the craft.</p>
+
+                <h3>The Modern Pivot: California Cedar</h3>
+                <p>As the industry evolved, the family shifted focus from finished consumer goods to the raw materials
+                    themselves. Through the <strong>California Cedar Products Company (CalCedar)</strong>, they became
+                    the world's primary supplier of Incense-cedar slats.</p>
+
+                <p><strong>Incense-cedar</strong> (<em>Calocedrus decurrens</em>) is prized for its straight grain,
+                    uniform density, and ease of sharpening. By controlling the supply of this critical material, the
+                    Berolzheimers transitioned from being a brand on the shelf to the invisible backbone of the global
+                    pencil industry.</p>
+            </section>
+
+            <footer>
+                © 2025 Antigravity. Historical context digested from project archives.
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        const LOOP_DURATION = 12000;
+        const FRAMES = [
+            { src: 'morse_frame_1_cedar.png', alt: 'Morse testing Incense Cedar', end: 3000 },
+            { src: 'morse_frame_2_comparing.png', alt: 'Comparing pencils', end: 6000 },
+            { src: 'morse_frame_3_cracking.png', alt: 'Pencil cracking', end: 9000 },
+            { src: 'morse_frame_4_final.png', alt: 'Morse satisfied', end: 12000 }
+        ];
+
+        const container = document.getElementById('episode-container');
+        const overlay = document.getElementById('overlay-text');
+        const pausedIndicator = document.getElementById('paused-indicator');
+        const imgElement = container.querySelector('img');
+
+        let isPlaying = true;
+        let startTime = Date.now();
+        let animationFrame;
+        let lastProgress = 0;
+
+        function tick() {
+            if (!isPlaying) return;
+
+            const now = Date.now();
+            const elapsed = (now - startTime);
+            const loopTime = elapsed % LOOP_DURATION;
+            lastProgress = elapsed;
+
+            // Frame Logic
+            let frameIndex = 0;
+            if (loopTime < 3000) frameIndex = 0;
+            else if (loopTime < 6000) frameIndex = 1;
+            else if (loopTime < 9000) frameIndex = 2;
+            else frameIndex = 3;
+
+            const targetFrame = FRAMES[frameIndex];
+
+            if (!imgElement.src.includes(targetFrame.src)) {
+                imgElement.src = targetFrame.src;
+                imgElement.alt = targetFrame.alt;
+            }
+
+            // Overlay Logic
+            if (loopTime >= 500 && loopTime < 2500) {
+                overlay.textContent = "California Incense-cedar.";
+                overlay.classList.add('visible');
+            } else if (loopTime >= 7000 && loopTime < 9000) {
+                overlay.textContent = "Grain direction matters.";
+                overlay.classList.add('visible');
+            } else {
+                overlay.classList.remove('visible');
+            }
+
+            animationFrame = requestAnimationFrame(tick);
+        }
+
+        container.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                startTime = Date.now() - lastProgress;
+                pausedIndicator.style.display = 'none';
+                tick();
+            } else {
+                cancelAnimationFrame(animationFrame);
+                pausedIndicator.style.display = 'block';
+            }
+        });
+
+        tick();
+    </script>
+</body>
+
+</html>
